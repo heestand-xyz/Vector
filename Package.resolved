@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "coregraphicsextensions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/heestand-xyz/CoreGraphicsExtensions",
+      "state" : {
+        "revision" : "7ddb96f057a10694ceaa4581bdaa5aa0c7eef87d",
+        "version" : "1.7.1"
+      }
+    }
+  ],
+  "version" : 2
+}
