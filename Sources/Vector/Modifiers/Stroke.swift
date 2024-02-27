@@ -11,7 +11,10 @@ extension VectorPath {
         dashPhase: CGFloat = 0.0
     ) -> VectorPath {
         
-        var cgPath: CGPath = cgPath.copy()!
+        guard var cgPath: CGPath = cgPath.copy() else {
+            return .empty
+        }
+        
         if !dashLengths.isEmpty {
             cgPath = cgPath.copy(dashingWithPhase: dashPhase, lengths: dashLengths)
         }

@@ -87,7 +87,7 @@ extension VectorPath {
             path.addEllipse(in: circleFrame)
         }
         
-        return VectorPath(cgPath: path.cgPath)
+        return VectorPath(path: path)
     }
 }
 

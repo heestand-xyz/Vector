@@ -93,7 +93,7 @@ extension VectorPath {
             path.closeSubpath()
         }
         
-        return VectorPath(cgPath: path.cgPath)
+        return VectorPath(path: path)
     }
 }
 

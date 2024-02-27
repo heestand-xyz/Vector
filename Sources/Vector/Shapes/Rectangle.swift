@@ -29,6 +29,6 @@ extension VectorPath {
                 style: continuous ? .continuous : .circular
             )
         }
-        return VectorPath(cgPath: path.cgPath)
+        return VectorPath(path: path)
     }
 }
