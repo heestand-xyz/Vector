@@ -5,7 +5,7 @@ import CoreGraphicsExtensions
 extension VectorPath {
     
     public static func pie(
-        position: CGPoint,
+        position: CGPoint = .zero,
         radius: CGFloat,
         angle: Angle,
         length: Angle,

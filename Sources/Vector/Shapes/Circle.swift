@@ -5,7 +5,7 @@ import CoreGraphicsExtensions
 extension VectorPath {
     
     public static func circle(
-        position: CGPoint,
+        position: CGPoint = .zero,
         radius: CGFloat
     ) -> VectorPath {
         

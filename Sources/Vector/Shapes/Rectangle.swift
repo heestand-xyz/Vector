@@ -5,6 +5,17 @@ import CoreGraphicsExtensions
 extension VectorPath {
     
     public static func rectangle(
+        position: CGPoint = .zero,
+        size: CGSize,
+        cornerRadius: CGFloat = 0.0,
+        continuous: Bool = true
+    ) -> VectorPath {
+        rectangle(frame: CGRect(origin: position - size / 2, size: size),
+                  cornerRadius: cornerRadius,
+                  continuous: continuous)
+    }
+    
+    public static func rectangle(
         frame: CGRect,
         cornerRadius: CGFloat = 0.0,
         continuous: Bool = true

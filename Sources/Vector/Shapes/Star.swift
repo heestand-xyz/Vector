@@ -6,7 +6,7 @@ extension VectorPath {
     
     public static func star(
         count: Int,
-        position: CGPoint,
+        position: CGPoint = .zero,
         radii: ClosedRange<CGFloat>,
         cornerRadius: CGFloat = 0.0
     ) -> VectorPath {

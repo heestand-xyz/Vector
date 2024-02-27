@@ -5,7 +5,7 @@ import CoreGraphicsExtensions
 extension VectorPath {
     
     public static func arc(
-        position: CGPoint,
+        position: CGPoint = .zero,
         radius: CGFloat,
         width: CGFloat,
         angle: Angle,

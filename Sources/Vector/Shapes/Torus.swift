@@ -5,7 +5,7 @@ import CoreGraphicsExtensions
 extension VectorPath {
     
     public static func torus(
-        position: CGPoint,
+        position: CGPoint = .zero,
         radius: CGFloat,
         width: CGFloat
     ) -> VectorPath {

@@ -6,7 +6,7 @@ extension VectorPath {
     
     public static func polygon(
         count: Int,
-        position: CGPoint,
+        position: CGPoint = .zero,
         radius: CGFloat,
         cornerRadius: CGFloat = 0.0
     ) -> VectorPath {
@@ -23,7 +23,7 @@ extension VectorPath {
     
     public static func polygon(
         count: Int,
-        position: CGPoint,
+        position: CGPoint = .zero,
         radius: CGFloat,
         relativeCornerRadius: CGFloat
     ) -> VectorPath {
