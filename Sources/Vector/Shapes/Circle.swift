@@ -15,6 +15,6 @@ extension VectorPath {
         let cgPath = CGMutablePath()
         cgPath.addEllipse(in: frame)
         
-        return VectorPath(cgPath: cgPath)
+        return VectorPath(cgPath: cgPath, closed: true)
     }
 }

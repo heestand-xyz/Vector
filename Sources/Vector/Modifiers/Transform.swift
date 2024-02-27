@@ -3,18 +3,39 @@ import SwiftUI
 
 extension VectorPath {
     
-    public func translate(
-        by offset: CGPoint
+    public func transform(
+        translation: CGPoint,
+        scale: CGFloat,
+        rotation: Angle,
+        anchor: CGPoint = .zero
     ) -> VectorPath {
         
         var transform: CGAffineTransform = .identity
-            .translatedBy(x: offset.x, y: offset.y)
+            .translatedBy(x: -anchor.x, y: -anchor.y)
+            .rotated(by: rotation.radians)
+            .scaledBy(x: scale, y: scale)
+            .translatedBy(x: anchor.x, y: anchor.y)
+            .translatedBy(x: translation.x, y: translation.y)
         
         guard let cgPath: CGPath = cgPath.copy(using: &transform) else {
             return .empty
         }
         
-        return VectorPath(cgPath: cgPath)
+        return VectorPath(cgPath: cgPath, closed: closed)
+    }
+    
+    public func translate(
+        by translation: CGPoint
+    ) -> VectorPath {
+        
+        var transform: CGAffineTransform = .identity
+            .translatedBy(x: translation.x, y: translation.y)
+        
+        guard let cgPath: CGPath = cgPath.copy(using: &transform) else {
+            return .empty
+        }
+        
+        return VectorPath(cgPath: cgPath, closed: closed)
     }
     
     public func scale(
@@ -28,7 +49,7 @@ extension VectorPath {
             return .empty
         }
         
-        return VectorPath(cgPath: cgPath)
+        return VectorPath(cgPath: cgPath, closed: closed)
     }
     
     public func scale(
@@ -42,7 +63,7 @@ extension VectorPath {
             return .empty
         }
         
-        return VectorPath(cgPath: cgPath)
+        return VectorPath(cgPath: cgPath, closed: closed)
     }
     
     public func rotate(
@@ -59,6 +80,6 @@ extension VectorPath {
             return .empty
         }
         
-        return VectorPath(cgPath: cgPath)
+        return VectorPath(cgPath: cgPath, closed: closed)
     }
 }

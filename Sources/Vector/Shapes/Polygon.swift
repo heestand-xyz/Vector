@@ -58,17 +58,17 @@ extension VectorPath {
                 let currentPoint: CGPoint = point(position: position, radius: radius, angle: angle(index: CGFloat(i), count: count))
                 let nextPoint: CGPoint = point(position: position, radius: radius, angle: angle(index: CGFloat(i) + 1.0, count: count))
                 
-                let cornerCircle: RoundedCornerCircle = roundedCornerCircle(leading: prevPoint,
-                                                                            center: currentPoint,
-                                                                            trailing: nextPoint,
-                                                                            cornerRadius: cornerRadius)
+                let roundedCorner: RoundedCorner = roundedCorner(at: currentPoint,
+                                                                from: prevPoint,
+                                                                to: nextPoint,
+                                                                cornerRadius: cornerRadius)
                 
                 let startAngle = angle(index: CGFloat(i) - 0.5, count: count)
                 let startAngleInRadians: Angle = .radians(Double(startAngle) * .pi * 2.0)
                 let endAngle = angle(index: CGFloat(i) + 0.5, count: count)
                 let endAngleInRadians: Angle = .radians(Double(endAngle) * .pi * 2.0)
                 
-                path.addArc(center: cornerCircle.center,
+                path.addArc(center: roundedCorner.cornerPoint,
                             radius: cornerRadius,
                             startAngle: startAngleInRadians,
                             endAngle: endAngleInRadians,
@@ -87,7 +87,7 @@ extension VectorPath {
             path.addEllipse(in: circleFrame)
         }
         
-        return VectorPath(path: path)
+        return VectorPath(path: path, closed: true)
     }
 }
 

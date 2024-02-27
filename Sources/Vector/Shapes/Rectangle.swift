@@ -13,7 +13,7 @@ extension VectorPath {
         if cornerRadius > 0.0 {
             let cgPath = CGMutablePath()
             cgPath.addRect(frame)
-            return VectorPath(cgPath: cgPath)
+            return VectorPath(cgPath: cgPath, closed: true)
         }
         
         let path = Path { path in
@@ -29,6 +29,6 @@ extension VectorPath {
                 style: continuous ? .continuous : .circular
             )
         }
-        return VectorPath(path: path)
+        return VectorPath(path: path, closed: true)
     }
 }

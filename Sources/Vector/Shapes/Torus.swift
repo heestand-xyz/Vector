@@ -17,6 +17,6 @@ extension VectorPath {
             path.addArc(center: position, radius: radius - width, startAngle: .zero, endAngle: Angle(degrees: 360), clockwise: false)
         }
         
-        return VectorPath(path: path)
+        return VectorPath(path: path, closed: true)
     }
 }

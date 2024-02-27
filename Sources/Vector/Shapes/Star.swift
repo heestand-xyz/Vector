@@ -34,36 +34,36 @@ extension VectorPath {
                 let nextInnerPoint: CGPoint = point(position: position, radius: radii.lowerBound, angle: angle(index: CGFloat(i) + 0.5, count: count))
                 let nextOuterPoint: CGPoint = point(position: position, radius: radii.upperBound, angle: angle(index: CGFloat(i) + 1.0, count: count))
 
-                let outerCornerCircle: RoundedCornerCircle = roundedCornerCircle(leading: prevInnerPoint,
-                                                                                 center: currentOuterPoint,
-                                                                                 trailing: nextInnerPoint,
-                                                                                 cornerRadius: cornerRadius)
+                let outerRoundedCorner: RoundedCorner = roundedCorner(at: currentOuterPoint,
+                                                                     from: prevInnerPoint,
+                                                                     to: nextInnerPoint,
+                                                                     cornerRadius: cornerRadius)
                 
-                let innerCornerCircle: RoundedCornerCircle = roundedCornerCircle(leading: currentOuterPoint,
-                                                                                 center: nextInnerPoint,
-                                                                                 trailing: nextOuterPoint,
-                                                                                 cornerRadius: cornerRadius)
+                let innerRoundedCorner: RoundedCorner = roundedCorner(at: nextInnerPoint,
+                                                                     from: currentOuterPoint,
+                                                                     to: nextOuterPoint,
+                                                                     cornerRadius: cornerRadius)
                 let outerLeadingAngle: Angle = .radians(atan2(
-                    outerCornerCircle.leading.y - outerCornerCircle.center.y,
-                    outerCornerCircle.leading.x - outerCornerCircle.center.x))
+                    outerRoundedCorner.leadingPoint.y - outerRoundedCorner.cornerPoint.y,
+                    outerRoundedCorner.leadingPoint.x - outerRoundedCorner.cornerPoint.x))
                 let outerTrailingAngle: Angle = .radians(atan2(
-                    outerCornerCircle.trailing.y - outerCornerCircle.center.y,
-                    outerCornerCircle.trailing.x - outerCornerCircle.center.x))
+                    outerRoundedCorner.trailingPoint.y - outerRoundedCorner.cornerPoint.y,
+                    outerRoundedCorner.trailingPoint.x - outerRoundedCorner.cornerPoint.x))
 
                 let innerLeadingAngle: Angle = .radians(atan2(
-                    innerCornerCircle.leading.y - innerCornerCircle.center.y,
-                    innerCornerCircle.leading.x - innerCornerCircle.center.x))
+                    innerRoundedCorner.leadingPoint.y - innerRoundedCorner.cornerPoint.y,
+                    innerRoundedCorner.leadingPoint.x - innerRoundedCorner.cornerPoint.x))
                 let innerTrailingAngle: Angle = .radians(atan2(
-                    innerCornerCircle.trailing.y - innerCornerCircle.center.y,
-                    innerCornerCircle.trailing.x - innerCornerCircle.center.x))
+                    innerRoundedCorner.trailingPoint.y - innerRoundedCorner.cornerPoint.y,
+                    innerRoundedCorner.trailingPoint.x - innerRoundedCorner.cornerPoint.x))
 
-                path.addArc(center: outerCornerCircle.center,
+                path.addArc(center: outerRoundedCorner.cornerPoint,
                             radius: cornerRadius,
                             startAngle: outerLeadingAngle,
                             endAngle: outerTrailingAngle,
                             clockwise: false)
 
-                path.addArc(center: innerCornerCircle.center,
+                path.addArc(center: innerRoundedCorner.cornerPoint,
                             radius: cornerRadius,
                             startAngle: innerLeadingAngle,
                             endAngle: innerTrailingAngle,
@@ -93,7 +93,7 @@ extension VectorPath {
             path.closeSubpath()
         }
         
-        return VectorPath(path: path)
+        return VectorPath(path: path, closed: true)
     }
 }
 

@@ -9,15 +9,21 @@ public struct VectorPath {
         Path(cgPath)
     }
     
-    public init(cgPath: CGPath) {
+    let closed: Bool
+    
+    public init(cgPath: CGPath, closed: Bool) {
         self.cgPath = cgPath
+        self.closed = closed
     }
     
-    public init(path: Path) {
+    public init(path: Path, closed: Bool) {
         self.cgPath = path.cgPath
+        self.closed = closed
     }
 }
 
 extension VectorPath {
-    public static let empty = VectorPath(cgPath: CGMutablePath())
+    
+    public static let empty = VectorPath(cgPath: CGMutablePath(),
+                                         closed: false)
 }

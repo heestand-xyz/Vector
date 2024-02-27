@@ -20,6 +20,6 @@ extension VectorPath {
         }
         cgPath = cgPath.copy(strokingWithWidth: lineWidth, lineCap: cap, lineJoin: join, miterLimit: miterLimit)
 
-        return VectorPath(cgPath: cgPath)
+        return VectorPath(cgPath: cgPath, closed: true)
     }
 }

@@ -2,13 +2,13 @@ import CoreGraphics
 
 extension VectorPath {
     
-    struct TreePointCircle {
+    struct ThreePointCircle {
         let position: CGPoint
         let radius: CGFloat
     }
     
     /// GPT-4
-    static func threePointCircle(_ point1: CGPoint, _ point2: CGPoint, _ point3: CGPoint) -> TreePointCircle? {
+    static func threePointCircle(_ point1: CGPoint, _ point2: CGPoint, _ point3: CGPoint) -> ThreePointCircle? {
         
         // Calculate the determinants
         let D = 2 * (point1.x * (point2.y - point3.y) + point2.x * (point3.y - point1.y) + point3.x * (point1.y - point2.y))
@@ -27,6 +27,6 @@ extension VectorPath {
         let dy = center.y - point1.y
         let radius = sqrt(dx * dx + dy * dy)
         
-        return TreePointCircle(position: center, radius: radius)
+        return ThreePointCircle(position: center, radius: radius)
     }
 }
