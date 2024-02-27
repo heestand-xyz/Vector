@@ -27,3 +27,15 @@ extension VectorPath {
     public static let empty = VectorPath(cgPath: CGMutablePath(),
                                          closed: false)
 }
+
+// TODO: Compare on ID if CGPath comparison is too heavy
+extension VectorPath: Equatable, Hashable {
+    
+    public static func == (lhs: VectorPath, rhs: VectorPath) -> Bool {
+        lhs.cgPath == rhs.cgPath
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(cgPath)
+    }
+}
