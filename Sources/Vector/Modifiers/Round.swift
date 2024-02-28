@@ -4,8 +4,7 @@ import CoreGraphics
 extension VectorPath {
     
     public func round(
-        cornerRadius: CGFloat,
-        closed: Bool = true
+        cornerRadius: CGFloat
     ) -> VectorPath {
         let path: Path = Self.rounded(
             cgPath: cgPath,
