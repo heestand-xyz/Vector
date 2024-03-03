@@ -53,7 +53,7 @@ extension VectorPath {
     ) -> [VectorAnglePoint] {
         let totalLength: CGFloat = length(curveSubdivisions: curveSubdivisions)
         let leftoverLength: CGFloat = totalLength.truncatingRemainder(dividingBy: spacing)
-        let points: [VectorAnglePoint] = anglePoints(spacing: spacing, phase: leftoverLength - phase, curveSubdivisions: curveSubdivisions)
+        let points: [VectorAnglePoint] = anglePoints(spacing: spacing, phase: leftoverLength - phase - 0.0001, curveSubdivisions: curveSubdivisions)
         return points.reversed()
     }
     
