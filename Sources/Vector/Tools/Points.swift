@@ -9,14 +9,6 @@ import CoreGraphics
 
 extension VectorPath {
     
-    public func leadingPoints(spacing: CGFloat, phase: CGFloat = 0.0) -> [CGPoint] {
-        []
-    }
-    
-    public func trailingPoints(spacing: CGFloat, phase: CGFloat = 0.0) -> [CGPoint] {
-        []
-    }
-    
     public func reversedPoints(
         spacingAsFraction: CGFloat,
         phaseAsFraction: CGFloat = 0.0,
