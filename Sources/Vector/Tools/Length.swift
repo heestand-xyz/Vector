@@ -10,7 +10,7 @@ import CoreGraphics
 extension VectorPath {
     
     public func length(
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> CGFloat {
         
         var totalLength: CGFloat = 0.0

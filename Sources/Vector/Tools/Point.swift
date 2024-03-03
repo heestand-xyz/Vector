@@ -11,14 +11,14 @@ import CoreGraphicsExtensions
 extension VectorPath {
     
     public func leadingPoint(
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> CGPoint {
         point(offsetAsFraction: 0.0,
               curveSubdivisions: curveSubdivisions)
     }
     
     public func trailingPoint(
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> CGPoint {
         point(offsetAsFraction: 1.0,
               curveSubdivisions: curveSubdivisions)
@@ -26,7 +26,7 @@ extension VectorPath {
     
     public func point(
         offsetAsFraction: CGFloat,
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> CGPoint {
         let fraction: CGFloat = min(max(offsetAsFraction, 0.0), 1.0)
         let length: CGFloat = length(curveSubdivisions: curveSubdivisions)
@@ -36,7 +36,7 @@ extension VectorPath {
     
     public func point(
         offset: CGFloat,
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> CGPoint {
         
         let totalLength: CGFloat = length(curveSubdivisions: curveSubdivisions)

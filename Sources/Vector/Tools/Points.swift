@@ -12,7 +12,7 @@ extension VectorPath {
     public func reversedPoints(
         spacingAsFraction: CGFloat,
         phaseAsFraction: CGFloat = 0.0,
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> [CGPoint] {
         guard spacingAsFraction > 0.0 else { return [] }
         let spacingFraction: CGFloat = min(max(spacingAsFraction, 0.0), 1.0)
@@ -25,7 +25,7 @@ extension VectorPath {
     public func reversedPoints(
         spacing: CGFloat,
         phase: CGFloat = 0.0,
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> [CGPoint] {
         let totalLength: CGFloat = length(curveSubdivisions: curveSubdivisions)
         let leftoverLength: CGFloat = totalLength.truncatingRemainder(dividingBy: spacing)
@@ -36,7 +36,7 @@ extension VectorPath {
     public func points(
         spacingAsFraction: CGFloat,
         phaseAsFraction: CGFloat = 0.0,
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> [CGPoint] {
         guard spacingAsFraction > 0.0 else { return [] }
         let spacingFraction: CGFloat = min(max(spacingAsFraction, 0.0), 1.0)
@@ -49,7 +49,7 @@ extension VectorPath {
     public func points(
         spacing: CGFloat,
         phase: CGFloat = 0.0,
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> [CGPoint] {
 
         let totalLength: CGFloat = length(curveSubdivisions: curveSubdivisions)

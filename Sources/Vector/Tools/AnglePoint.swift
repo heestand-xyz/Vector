@@ -13,7 +13,7 @@ extension VectorPath {
     
     public func anglePoint(
         offsetAsFraction: CGFloat,
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> VectorAnglePoint {
         let fraction: CGFloat = min(max(offsetAsFraction, 0.0), 1.0)
         let length: CGFloat = length(curveSubdivisions: curveSubdivisions)
@@ -24,7 +24,7 @@ extension VectorPath {
     public func anglePoint(
         offset: CGFloat,
         relativeComparisonOffset: CGFloat = 0.001,
-        curveSubdivisions: Int = 10
+        curveSubdivisions: Int = 20
     ) -> VectorAnglePoint {
         let length: CGFloat = length(curveSubdivisions: curveSubdivisions)
         let targetPoint: CGPoint = point(offset: offset, curveSubdivisions: curveSubdivisions)
