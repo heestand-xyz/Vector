@@ -78,13 +78,18 @@ extension VectorPath {
         let targetPoints = points(spacing: spacing, phase: phase, curveSubdivisions: curveSubdivisions)
         guard targetPoints.count >= 2 else { return [] }
         return targetPoints.enumerated().map { index, targetPoint in
-            if index < targetPoints.count - 1 {
+            if index == 0 {
                 let nextPoint: CGPoint = targetPoints[index + 1]
                 let angle: Angle = .radians(atan2(nextPoint.y - targetPoint.y, nextPoint.x - targetPoint.x))
                 return VectorAnglePoint(point: targetPoint, angle: angle)
-            } else {
+            } else if index == targetPoints.count - 1 {
                 let prevPoint: CGPoint = targetPoints[index - 1]
                 let angle: Angle = .radians(atan2(targetPoint.y - prevPoint.y, targetPoint.x - prevPoint.x))
+                return VectorAnglePoint(point: targetPoint, angle: angle)
+            } else {
+                let prevPoint: CGPoint = targetPoints[index - 1]
+                let nextPoint: CGPoint = targetPoints[index + 1]
+                let angle: Angle = .radians(atan2(nextPoint.y - prevPoint.y, nextPoint.x - prevPoint.x))
                 return VectorAnglePoint(point: targetPoint, angle: angle)
             }
         }
