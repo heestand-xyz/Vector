@@ -10,15 +10,15 @@ import CoreGraphics
 extension VectorPath {
     
     public func reversedPoints(
-        spacingAsFraction: CGFloat,
-        phaseAsFraction: CGFloat = 0.0,
+        spacingFraction: CGFloat,
+        phaseFraction: CGFloat = 0.0,
         curveSubdivisions: Int = 20
     ) -> [CGPoint] {
-        guard spacingAsFraction > 0.0 else { return [] }
-        let spacingFraction: CGFloat = min(max(spacingAsFraction, 0.0), 1.0)
+        guard spacingFraction > 0.0 else { return [] }
+        let spacingFraction: CGFloat = min(max(spacingFraction, 0.0), 1.0)
         let totalLength: CGFloat = length(curveSubdivisions: curveSubdivisions)
         let spacing: CGFloat = spacingFraction * totalLength
-        let phase: CGFloat = phaseAsFraction * totalLength
+        let phase: CGFloat = phaseFraction * totalLength
         return reversedPoints(spacing: spacing, phase: phase, curveSubdivisions: curveSubdivisions)
     }
     
@@ -34,15 +34,15 @@ extension VectorPath {
     }
     
     public func points(
-        spacingAsFraction: CGFloat,
-        phaseAsFraction: CGFloat = 0.0,
+        spacingFraction: CGFloat,
+        phaseFraction: CGFloat = 0.0,
         curveSubdivisions: Int = 20
     ) -> [CGPoint] {
-        guard spacingAsFraction > 0.0 else { return [] }
-        let spacingFraction: CGFloat = min(max(spacingAsFraction, 0.0), 1.0)
+        guard spacingFraction > 0.0 else { return [] }
+        let spacingFraction: CGFloat = min(max(spacingFraction, 0.0), 1.0)
         let totalLength: CGFloat = length(curveSubdivisions: curveSubdivisions)
         let spacing: CGFloat = spacingFraction * totalLength
-        let phase: CGFloat = phaseAsFraction * totalLength
+        let phase: CGFloat = phaseFraction * totalLength
         return points(spacing: spacing, phase: phase, curveSubdivisions: curveSubdivisions)
     }
     

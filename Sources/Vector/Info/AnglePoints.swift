@@ -11,15 +11,15 @@ import CoreGraphics
 extension VectorPath {
     
     public func centeredAnglePoints(
-        spacingAsFraction: CGFloat,
-        phaseAsFraction: CGFloat = 0.0,
+        spacingFraction: CGFloat,
+        phaseFraction: CGFloat = 0.0,
         curveSubdivisions: Int = 20
     ) -> [VectorAnglePoint] {
-        guard spacingAsFraction > 0.0 else { return [] }
-        let spacingFraction: CGFloat = min(max(spacingAsFraction, 0.0), 1.0)
+        guard spacingFraction > 0.0 else { return [] }
+        let spacingFraction: CGFloat = min(max(spacingFraction, 0.0), 1.0)
         let totalLength: CGFloat = length(curveSubdivisions: curveSubdivisions)
         let spacing: CGFloat = spacingFraction * totalLength
-        let phase: CGFloat = phaseAsFraction * totalLength
+        let phase: CGFloat = phaseFraction * totalLength
         return centeredAnglePoints(spacing: spacing, phase: phase, curveSubdivisions: curveSubdivisions)
     }
     
@@ -34,15 +34,15 @@ extension VectorPath {
     }
     
     public func reversedAnglePoints(
-        spacingAsFraction: CGFloat,
-        phaseAsFraction: CGFloat = 0.0,
+        spacingFraction: CGFloat,
+        phaseFraction: CGFloat = 0.0,
         curveSubdivisions: Int = 20
     ) -> [VectorAnglePoint] {
-        guard spacingAsFraction > 0.0 else { return [] }
-        let spacingFraction: CGFloat = min(max(spacingAsFraction, 0.0), 1.0)
+        guard spacingFraction > 0.0 else { return [] }
+        let spacingFraction: CGFloat = min(max(spacingFraction, 0.0), 1.0)
         let totalLength: CGFloat = length(curveSubdivisions: curveSubdivisions)
         let spacing: CGFloat = spacingFraction * totalLength
-        let phase: CGFloat = phaseAsFraction * totalLength
+        let phase: CGFloat = phaseFraction * totalLength
         return reversedAnglePoints(spacing: spacing, phase: phase, curveSubdivisions: curveSubdivisions)
     }
     
@@ -58,15 +58,15 @@ extension VectorPath {
     }
     
     public func anglePoints(
-        spacingAsFraction: CGFloat,
-        phaseAsFraction: CGFloat = 0.0,
+        spacingFraction: CGFloat,
+        phaseFraction: CGFloat = 0.0,
         curveSubdivisions: Int = 20
     ) -> [VectorAnglePoint] {
-        guard spacingAsFraction > 0.0 else { return [] }
-        let spacingFraction: CGFloat = min(max(spacingAsFraction, 0.0), 1.0)
+        guard spacingFraction > 0.0 else { return [] }
+        let spacingFraction: CGFloat = min(max(spacingFraction, 0.0), 1.0)
         let totalLength: CGFloat = length(curveSubdivisions: curveSubdivisions)
         let spacing: CGFloat = spacingFraction * totalLength
-        let phase: CGFloat = phaseAsFraction * totalLength
+        let phase: CGFloat = phaseFraction * totalLength
         return anglePoints(spacing: spacing, phase: phase, curveSubdivisions: curveSubdivisions)
     }
     
