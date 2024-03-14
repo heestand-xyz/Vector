@@ -1,4 +1,5 @@
 import CoreGraphics
+import SwiftUI
 
 extension VectorPath {
     
@@ -11,15 +12,8 @@ extension VectorPath {
         dashPhase: CGFloat = 0.0
     ) -> VectorPath {
         
-        guard var cgPath: CGPath = cgPath.copy() else {
-            return .empty
-        }
+        let style = StrokeStyle(lineWidth: lineWidth, lineCap: cap, lineJoin: join, miterLimit: miterLimit, dash: dashLengths, dashPhase: dashPhase)
         
-        if !dashLengths.isEmpty {
-            cgPath = cgPath.copy(dashingWithPhase: dashPhase, lengths: dashLengths)
-        }
-        cgPath = cgPath.copy(strokingWithWidth: lineWidth, lineCap: cap, lineJoin: join, miterLimit: miterLimit)
-
-        return VectorPath(cgPath: cgPath, closed: true)
+        return VectorPath(path: path.strokedPath(style), closed: true)
     }
 }
