@@ -44,8 +44,8 @@ extension VectorPath {
                 y: position.y + sin(CGFloat(trailingAngle.radians)) * cornerRadius)
             
             let innerTrailingSideExtraPoint = CGPoint(
-                x: position.x + cos(CGFloat(trailingAngle.radians)) * (cornerRadius + 1),
-                y: position.y + sin(CGFloat(trailingAngle.radians)) * (cornerRadius + 1))
+                x: position.x + cos(CGFloat(trailingAngle.radians)) * (cornerRadius + 0.0001),
+                y: position.y + sin(CGFloat(trailingAngle.radians)) * (cornerRadius + 0.0001))
             
             let circle = threePointCircle(innerLeadingSidePoint, innerTrailingSidePoint, innerTrailingSideExtraPoint)
 
@@ -71,11 +71,11 @@ extension VectorPath {
                 
                 if length != .degrees(180),
                    let circle {
-                    let leadingAngle: Angle = .radians(atan2(innerLeadingSidePoint.y - position.y,
-                                                             innerLeadingSidePoint.x - position.x))
-                    let trailingAngle: Angle = .radians(atan2(innerTrailingSidePoint.y - position.y,
-                                                              innerTrailingSidePoint.x - position.x))
-                    path.addArc(center: position,
+                    let leadingAngle: Angle = .radians(atan2(innerLeadingSidePoint.y - circle.position.y,
+                                                             innerLeadingSidePoint.x - circle.position.x))
+                    let trailingAngle: Angle = .radians(atan2(innerTrailingSidePoint.y - circle.position.y,
+                                                              innerTrailingSidePoint.x - circle.position.x))
+                    path.addArc(center: circle.position,
                                 radius: circle.radius,
                                 startAngle: trailingAngle,
                                 endAngle: leadingAngle,
