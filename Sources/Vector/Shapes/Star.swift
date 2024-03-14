@@ -43,30 +43,17 @@ extension VectorPath {
                                                                      from: currentOuterPoint,
                                                                      to: nextOuterPoint,
                                                                      cornerRadius: cornerRadius)
-                let outerLeadingAngle: Angle = .radians(atan2(
-                    outerRoundedCorner.leadingPoint.y - outerRoundedCorner.cornerPoint.y,
-                    outerRoundedCorner.leadingPoint.x - outerRoundedCorner.cornerPoint.x))
-                let outerTrailingAngle: Angle = .radians(atan2(
-                    outerRoundedCorner.trailingPoint.y - outerRoundedCorner.cornerPoint.y,
-                    outerRoundedCorner.trailingPoint.x - outerRoundedCorner.cornerPoint.x))
-
-                let innerLeadingAngle: Angle = .radians(atan2(
-                    innerRoundedCorner.leadingPoint.y - innerRoundedCorner.cornerPoint.y,
-                    innerRoundedCorner.leadingPoint.x - innerRoundedCorner.cornerPoint.x))
-                let innerTrailingAngle: Angle = .radians(atan2(
-                    innerRoundedCorner.trailingPoint.y - innerRoundedCorner.cornerPoint.y,
-                    innerRoundedCorner.trailingPoint.x - innerRoundedCorner.cornerPoint.x))
-
-                path.addArc(center: outerRoundedCorner.cornerPoint,
+                
+                path.addArc(center: outerRoundedCorner.roundedPoint,
                             radius: cornerRadius,
-                            startAngle: outerLeadingAngle,
-                            endAngle: outerTrailingAngle,
+                            startAngle: outerRoundedCorner.leadingAngle,
+                            endAngle: outerRoundedCorner.trailingAngle,
                             clockwise: false)
 
-                path.addArc(center: innerRoundedCorner.cornerPoint,
+                path.addArc(center: innerRoundedCorner.roundedPoint,
                             radius: cornerRadius,
-                            startAngle: innerLeadingAngle,
-                            endAngle: innerTrailingAngle,
+                            startAngle: innerRoundedCorner.leadingAngle,
+                            endAngle: innerRoundedCorner.trailingAngle,
                             clockwise: !isSubConvex)
                 
             }

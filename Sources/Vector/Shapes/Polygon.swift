@@ -68,7 +68,7 @@ extension VectorPath {
                 let endAngle = angle(index: CGFloat(i) + 0.5, count: count)
                 let endAngleInRadians: Angle = .radians(Double(endAngle) * .pi * 2.0)
                 
-                path.addArc(center: roundedCorner.cornerPoint,
+                path.addArc(center: roundedCorner.roundedPoint,
                             radius: cornerRadius,
                             startAngle: startAngleInRadians,
                             endAngle: endAngleInRadians,
