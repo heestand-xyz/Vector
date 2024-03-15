@@ -28,6 +28,10 @@ extension VectorPath {
         relativeCornerRadius: CGFloat
     ) -> VectorPath {
         
+        if count < 3 {
+            return .empty
+        }
+        
         var path = Path()
                 
         let maxCornerRadius = maxCornerRadius(count: count, position: position, radius: radius)

@@ -11,6 +11,10 @@ extension VectorPath {
         cornerRadius: CGFloat = 0.0
     ) -> VectorPath {
         
+        if count < 3 {
+            return .empty
+        }
+        
         var path = Path()
                 
         if cornerRadius > 0.0 {
