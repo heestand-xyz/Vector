@@ -26,5 +26,8 @@ let package = Package(
                 "CoreGraphicsExtensions",
                 "SVGPath",
             ]),
+        .testTarget(
+            name: "VectorTests",
+            dependencies: ["Vector"])
     ]
 )
