@@ -7,7 +7,7 @@ extension VectorPath {
     
     public var svgString: String {
         let svgPath = SVGPath(cgPath: cgPath)
-        let options = SVGPath.WriteOptions(prettyPrinted: true)
+        let options = SVGPath.WriteOptions(prettyPrinted: false)
         return svgPath.string(with: options)
     }
     
