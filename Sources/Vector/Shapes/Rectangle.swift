@@ -21,7 +21,7 @@ extension VectorPath {
         continuous: Bool = true
     ) -> VectorPath {
         
-        if cornerRadius > 0.0 {
+        if cornerRadius == 0.0 {
             let cgPath = CGMutablePath()
             cgPath.addRect(frame)
             return VectorPath(cgPath: cgPath, closed: true)

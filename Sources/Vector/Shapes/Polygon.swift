@@ -86,7 +86,7 @@ extension VectorPath {
             
             let circleSize = CGSize(width: maxCornerRadius * 2,
                                     height: maxCornerRadius * 2)
-            let circleFrame = CGRect(origin: position + maxCornerRadius,
+            let circleFrame = CGRect(center: position,
                                      size: circleSize)
             path.addEllipse(in: circleFrame)
         }
