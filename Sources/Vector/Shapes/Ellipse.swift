@@ -4,13 +4,11 @@ import CoreGraphicsExtensions
 
 extension VectorPath {
     
-    public static func circle(
+    public static func ellipse(
         position: CGPoint = .zero,
-        radius: CGFloat
+        size: CGSize
     ) -> VectorPath {
         
-        let size = CGSize(width: radius * 2,
-                          height: radius * 2)
         let frame = CGRect(center: position, size: size)
         
         let cgPath = CGMutablePath()
