@@ -5,7 +5,8 @@ import CoreGraphicsExtensions
 extension VectorPath {
     
     public static func line(
-        points: [CGPoint]
+        points: [CGPoint],
+        closed: Bool = false
     ) -> VectorPath {
         
         if points.isEmpty { return .empty }
@@ -15,7 +16,10 @@ extension VectorPath {
         for point in points.dropFirst() {
             cgPath.addLine(to: point)            
         }
+        if closed {
+            cgPath.closeSubpath()
+        }
         
-        return VectorPath(cgPath: cgPath, closed: false)
+        return VectorPath(cgPath: cgPath, closed: closed)
     }
 }

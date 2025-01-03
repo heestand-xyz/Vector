@@ -16,6 +16,7 @@ let package = Package(
             targets: ["Vector"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/heestand-xyz/PixelColor", from: "3.0.0"),
         .package(url: "https://github.com/heestand-xyz/CoreGraphicsExtensions", from: "1.8.1"),
         .package(url: "https://github.com/nicklockwood/SVGPath", from: "1.1.4"),
     ],
@@ -25,6 +26,7 @@ let package = Package(
             dependencies: [
                 "CoreGraphicsExtensions",
                 "SVGPath",
+                "PixelColor",
             ]),
         .testTarget(
             name: "VectorTests",
