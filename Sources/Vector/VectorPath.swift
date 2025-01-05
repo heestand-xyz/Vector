@@ -1,7 +1,7 @@
 import SwiftUI
-import CoreGraphics
+@preconcurrency import CoreGraphics
 
-public struct VectorPath {
+public struct VectorPath: Sendable {
     
     public let cgPath: CGPath
     

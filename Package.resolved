@@ -5,8 +5,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/heestand-xyz/CoreGraphicsExtensions",
       "state" : {
-        "revision" : "7ddb96f057a10694ceaa4581bdaa5aa0c7eef87d",
-        "version" : "1.7.1"
+        "revision" : "e46bb3c71226d7b1cafe9739f9dd4b46caf04e7c",
+        "version" : "1.9.0"
+      }
+    },
+    {
+      "identity" : "pixelcolor",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/heestand-xyz/PixelColor",
+      "state" : {
+        "revision" : "2e3cf16dd01a1a0ed3ded435ab0875c3f20ad3bc",
+        "version" : "3.0.1"
+      }
+    },
+    {
+      "identity" : "svgpath",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nicklockwood/SVGPath",
+      "state" : {
+        "revision" : "e738fb6400d4e4d14e82c41c9d30c3908285eae9",
+        "version" : "1.1.5"
       }
     }
   ],
