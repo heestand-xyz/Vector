@@ -126,8 +126,39 @@ extension VectorPath {
                         let targetPoint = Self.point(at: offset, from: lastPoint, to: startPoint, length: length)
                         targetPoints.append(targetPoint)
                     }
+                    if lastPoint == startPoint {
+                        targetPoints.removeLast()
+                    }
                 }
                 lastPoint = startPoint
+            default:
+                break
+            }
+        }
+        
+        return targetPoints
+    }
+    
+    /// Points of line segments, ignores curves.
+    public func rawPoints() -> [CGPoint] {
+
+        var targetPoints: [CGPoint] = []
+        
+        cgPath.applyWithBlock { elementPointer in
+            
+            let element = elementPointer.pointee
+            
+            switch element.type {
+            case .moveToPoint:
+                targetPoints.append(element.points.pointee)
+            case .addLineToPoint:
+                targetPoints.append(element.points.pointee)
+            case .addQuadCurveToPoint:
+                break
+            case .addCurveToPoint:
+                break
+            case .closeSubpath:
+                break
             default:
                 break
             }

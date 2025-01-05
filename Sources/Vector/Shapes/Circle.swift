@@ -19,6 +19,64 @@ extension VectorPath {
         return VectorPath(cgPath: cgPath, closed: true)
     }
     
+    public static func circleWithPoints(
+        position: CGPoint = .zero,
+        radius: CGFloat,
+        count: Int,
+        curveSubdivisions: Int = 20
+    ) -> VectorPath {
+        .line(
+            points: VectorPath.circle(
+                position: position,
+                radius: radius
+            ).points(
+                spacingFraction: 1.0 / CGFloat(count),
+                curveSubdivisions: curveSubdivisions
+            ),
+            closed: true
+        )
+    }
+    
+    public static func circleWithPoints(
+        position: CGPoint = .zero,
+        radius: CGFloat,
+        spacing: CGFloat,
+        phase: CGFloat = 0.0,
+        curveSubdivisions: Int = 20
+    ) -> VectorPath {
+        .line(
+            points: VectorPath.circle(
+                position: position,
+                radius: radius
+            ).points(
+                spacing: spacing,
+                phase: phase,
+                curveSubdivisions: curveSubdivisions
+            ),
+            closed: true
+        )
+    }
+    
+    public static func circleWithPoints(
+        position: CGPoint = .zero,
+        radius: CGFloat,
+        spacingFraction: CGFloat,
+        phaseFraction: CGFloat = 0.0,
+        curveSubdivisions: Int = 20
+    ) -> VectorPath {
+        .line(
+            points: VectorPath.circle(
+                position: position,
+                radius: radius
+            ).points(
+                spacingFraction: spacingFraction,
+                phaseFraction: phaseFraction,
+                curveSubdivisions: curveSubdivisions
+            ),
+            closed: true
+        )
+    }
+    
     public static func circle(_ a: CGPoint, _ b: CGPoint, _ c: CGPoint) -> VectorPath {
         let position = circleCenter(a, b, c)
         let radius = hypot(position.x - a.x, position.y - a.y)
