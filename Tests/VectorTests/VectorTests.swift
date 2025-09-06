@@ -20,4 +20,24 @@ final class VectorTest: XCTestCase {
             XCTAssertEqual(point.y, position.y, accuracy: 0.0001)
         }
     }
+    
+    func testSVG() throws {
+        let vectorPath: VectorPath = .rectangle(frame: .one)
+        let svgData: Data = try vectorPath.svgFileData()
+        let svgVectorPath: VectorPath = try .firstSVG(data: svgData)
+        XCTAssertEqual(
+            vectorPath.rawPoints(),
+            svgVectorPath.rawPoints()
+        )
+    }
+    
+    func testOrientedSVG() throws {
+        let vectorPath: VectorPath = .rectangle(frame: .one)
+        let svgData: Data = try vectorPath.svgOrientedFileData()
+        let svgVectorPath: VectorPath = try .firstOrientedSVG(data: svgData)
+        XCTAssertEqual(
+            vectorPath.rawPoints(),
+            svgVectorPath.rawPoints()
+        )
+    }
 }
