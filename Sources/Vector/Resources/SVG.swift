@@ -10,7 +10,7 @@ extension VectorPath {
         case stringToDataFailed
         case dataToStringFailed
         case noVectorPathsFound
-        case svgSizeNotFound
+        case svgViewBoxSizeNotFound
         var errorDescription: String? {
             switch self {
             case .stringToDataFailed:
@@ -19,8 +19,8 @@ extension VectorPath {
                 "Data to string conversion failed."
             case .noVectorPathsFound:
                 "No vector paths found."
-            case .svgSizeNotFound:
-                "SVG size not found."
+            case .svgViewBoxSizeNotFound:
+                "SVG view box size not found."
             }
         }
     }
@@ -34,7 +34,6 @@ extension VectorPath {
     ) throws -> Data {
         let size: CGSize = size ?? boundingBox().size
         return try self
-            .scale(by: size.height)
             .scale(by: CGSize(width: 1.0, height: -1.0))
             .translate(by: CGPoint(x: size.width / 2, y: -size.height / 2))
             .svgFileData(color: color, backgroundColor: backgroundColor, lineWidth: lineWidth, size: size)
@@ -88,6 +87,12 @@ extension VectorPath {
         return first
     }
     
+    public static func combinedOrientedSVG(
+        data: Data
+    ) throws -> VectorPath {
+        .combine(paths: try allOrientedSVGs(data: data))
+    }
+    
     public static func allOrientedSVGs(
         data: Data
     ) throws -> [VectorPath] {
@@ -96,7 +101,6 @@ extension VectorPath {
             vectorPath
                 .translate(by: CGPoint(x: -size.width / 2, y: size.height / 2))
                 .scale(by: CGSize(width: 1.0, height: -1.0))
-                .scale(by: 1.0 / size.height)
         }
     }
     
@@ -108,6 +112,12 @@ extension VectorPath {
             throw SVGError.noVectorPathsFound
         }
         return first
+    }
+    
+    public static func combinedSVG(
+        data: Data
+    ) throws -> VectorPath {
+        .combine(paths: try allSVGs(data: data))
     }
     
     public static func allSVGs(
@@ -123,11 +133,9 @@ extension VectorPath {
         let delegate = SVGPathExtractor()
         parser.delegate = delegate
         parser.parse()
-        guard let widthString = delegate.width, let width = Double(widthString),
-              let heightString = delegate.height, let height = Double(heightString) else {
-            throw SVGError.svgSizeNotFound
+        guard let size: CGSize = delegate.size else {
+            throw SVGError.svgViewBoxSizeNotFound
         }
-        let size = CGSize(width: width, height: height)
         var vectorPaths: [VectorPath] = []
         for path in delegate.paths {
             let vectorPath: VectorPath = try svg(path: path)
@@ -149,16 +157,17 @@ extension VectorPath {
 
 private class SVGPathExtractor: NSObject, XMLParserDelegate {
     var paths: [String] = []
-    var width: String?
-    var height: String?
+    var size: CGSize?
     func parser(_ parser: XMLParser,
                 didStartElement elementName: String,
                 namespaceURI: String?,
                 qualifiedName qName: String?,
                 attributes attributeDict: [String : String] = [:]) {
         if elementName.lowercased() == "svg" {
-            width = attributeDict["width"]
-            height = attributeDict["height"]
+            let viewBox: [Double] = attributeDict["viewBox"]?.split(separator: " ").compactMap(Double.init) ?? []
+            if viewBox.count == 4 {
+                size = CGSize(width: viewBox[2], height: viewBox[3])
+            }
         }
         if elementName.lowercased() == "path",
            let d = attributeDict["d"] {
