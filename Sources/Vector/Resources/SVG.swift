@@ -30,13 +30,13 @@ extension VectorPath {
         color: PixelColor = .black,
         backgroundColor: PixelColor = .white,
         lineWidth: CGFloat = 1.0,
-        size: CGSize? = nil
+        frame: CGRect? = nil
     ) throws -> Data {
-        let size: CGSize = size ?? boundingBox().size
+        let frame: CGRect = frame ?? boundingBox()
         return try self
             .scale(by: CGSize(width: 1.0, height: -1.0))
-            .translate(by: CGPoint(x: size.width / 2, y: -size.height / 2))
-            .svgFileData(color: color, backgroundColor: backgroundColor, lineWidth: lineWidth, size: size)
+            .translate(by: CGPoint(x: -frame.origin.x, y: frame.origin.y))
+            .svgFileData(color: color, backgroundColor: backgroundColor, lineWidth: lineWidth, size: frame.size)
     }
     
     public func svgFileData(
