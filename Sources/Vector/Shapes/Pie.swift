@@ -19,7 +19,7 @@ extension VectorPath {
             
             let minLength = radius * 2
             let arcLength = length.radians * (minLength / 2)
-            print(cornerRadius, arcLength / 2)
+
             let cornerRadius = min(cornerRadius, (arcLength / 2) * 0.9)
             
             let outerRadius: CGFloat = minLength / 2
