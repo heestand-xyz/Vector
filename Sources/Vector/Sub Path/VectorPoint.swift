@@ -15,8 +15,8 @@ public enum VectorPoint: Sendable {
     )
     case curvePoint(
         CGPoint,
-        leadingControl: CGPoint,
-        trailingControl: CGPoint
+        leadingControl: CGPoint?,
+        trailingControl: CGPoint?
     )
     case arc(
         center: CGPoint,
