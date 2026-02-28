@@ -44,7 +44,7 @@ extension VectorPath {
                     pendingQuadControl = nil
                     continue
                 }
-
+                
                 if let quadControl: CGPoint = pendingQuadControl {
                     cgPath.addQuadCurve(to: point, control: quadControl)
                     pendingQuadControl = nil
@@ -54,12 +54,12 @@ extension VectorPath {
                 } else {
                     cgPath.addLine(to: point)
                 }
-
+                
                 currentAnchor = Anchor(point: point, trailingControl: nil)
-
+                
             case .quadCurve(let control):
                 pendingQuadControl = control
-
+                
             case .curvePoint(let point, let leadingControl, let trailingControl):
                 if !hasStartedSubPath {
                     cgPath.move(to: point)
@@ -68,7 +68,7 @@ extension VectorPath {
                     pendingQuadControl = nil
                     continue
                 }
-
+                
                 if let quadControl: CGPoint = pendingQuadControl {
                     cgPath.addQuadCurve(to: point, control: quadControl)
                     pendingQuadControl = nil
@@ -85,31 +85,8 @@ extension VectorPath {
                         cgPath.addLine(to: point)
                     }
                 }
-
-                currentAnchor = Anchor(point: point, trailingControl: trailingControl)
-
-            case .arc(let center, let radius, let startAngle, let endAngle, let clockwise):
-                let startPoint: CGPoint = CGPoint(
-                    x: center.x + cos(CGFloat(startAngle.radians)) * radius,
-                    y: center.y + sin(CGFloat(startAngle.radians)) * radius
-                )
-                if !hasStartedSubPath {
-                    cgPath.move(to: startPoint)
-                    hasStartedSubPath = true
-                }
-
-                cgPath.addArc(center: center,
-                              radius: radius,
-                              startAngle: CGFloat(startAngle.radians),
-                              endAngle: CGFloat(endAngle.radians),
-                              clockwise: clockwise)
-
-                let endPoint: CGPoint = CGPoint(
-                    x: center.x + cos(CGFloat(endAngle.radians)) * radius,
-                    y: center.y + sin(CGFloat(endAngle.radians)) * radius
-                )
-                currentAnchor = Anchor(point: endPoint, trailingControl: nil)
-                pendingQuadControl = nil
+                
+                currentAnchor = Anchor(point: point, trailingControl: trailingControl)   
             }
         }
 

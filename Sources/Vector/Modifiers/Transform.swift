@@ -25,6 +25,13 @@ extension VectorPath {
     }
     
     public func translate(
+        x: CGFloat = 0.0,
+        y: CGFloat = 0.0
+    ) -> VectorPath {
+        translate(by: CGPoint(x: x, y: y))
+    }
+    
+    public func translate(
         by translation: CGPoint
     ) -> VectorPath {
         

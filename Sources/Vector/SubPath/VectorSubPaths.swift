@@ -9,7 +9,7 @@ import CoreGraphics
 
 extension VectorPath {
 
-    public func vectorSubPaths() -> [VectorSubPath] {
+    public func subPaths() -> [VectorSubPath] {
 
         let elements: [DecodedCGPathElement] = decodedCGPathElements()
         var subPaths: [VectorSubPath] = []
