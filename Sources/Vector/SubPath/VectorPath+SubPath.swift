@@ -60,7 +60,7 @@ extension VectorPath {
             case .quadCurve(let control):
                 pendingQuadControl = control
                 
-            case .curvePoint(let point, let leadingControl, let trailingControl):
+            case .curve(let point, let leadingControl, let trailingControl):
                 if !hasStartedSubPath {
                     cgPath.move(to: point)
                     hasStartedSubPath = true

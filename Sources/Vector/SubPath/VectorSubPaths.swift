@@ -63,8 +63,8 @@ extension VectorPath {
                         currentSubPathVectorPoints.removeLast()
                     }
                     currentSubPathVectorPoints.append(
-                        .curvePoint(
-                            startPoint,
+                        .curve(
+                            point: startPoint,
                             leadingControl: nil,
                             trailingControl: segmentTrailingControl
                         )
@@ -80,8 +80,8 @@ extension VectorPath {
                 }
                 
                 currentSubPathVectorPoints.append(
-                    .curvePoint(
-                        endPoint,
+                    .curve(
+                        point: endPoint,
                         leadingControl: segmentLeadingControl,
                         trailingControl: trailingControl
                     )
