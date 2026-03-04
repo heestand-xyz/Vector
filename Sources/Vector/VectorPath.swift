@@ -9,7 +9,7 @@ public struct VectorPath: Sendable {
         Path(cgPath)
     }
     
-    let closed: Bool
+    public let closed: Bool
     
     public init(cgPath: CGPath, closed: Bool) {
         self.cgPath = cgPath
