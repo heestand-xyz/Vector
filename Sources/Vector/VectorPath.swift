@@ -1,3 +1,10 @@
+//
+//  VectorPath.swift
+//  Vector
+//
+//  Created by Anton Heestand on 2024-03-02.
+//
+
 import SwiftUI
 @preconcurrency import CoreGraphics
 
@@ -24,8 +31,10 @@ public struct VectorPath: Sendable {
 
 extension VectorPath {
     
-    public static let empty = VectorPath(cgPath: CGMutablePath(),
-                                         closed: false)
+    public static let empty = VectorPath(
+        cgPath: CGMutablePath(),
+        closed: false
+    )
 }
 
 // TODO: Compare on ID if CGPath comparison is too heavy
