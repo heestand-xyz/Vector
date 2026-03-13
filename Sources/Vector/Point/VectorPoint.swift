@@ -21,6 +21,19 @@ public enum VectorPoint: Sendable, Hashable, Codable {
     )
 }
 
+extension VectorPoint {
+    public var anchorPoint: CGPoint {
+        switch self {
+        case .point(let point):
+            return point
+        case .quadCurve(let control):
+            return control
+        case .curve(let point, _, _):
+            return point
+        }
+    }
+}
+
 extension VectorPoint: CustomStringConvertible {
     public var description: String {
         switch self {
