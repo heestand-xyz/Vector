@@ -20,6 +20,43 @@ final class VectorTest: XCTestCase {
             XCTAssertEqual(point.y, position.y, accuracy: 0.0001)
         }
     }
+
+    func testCountPointsIncludeEndpoints() throws {
+
+        let subPath = VectorSubPath(
+            points: [
+                .point(.zero),
+                .point(CGPoint(x: 10.0, y: 0.0)),
+                .point(CGPoint(x: 10.0, y: 10.0)),
+            ],
+            closed: false
+        )
+
+        let points: [CGPoint] = subPath.points(count: 3)
+
+        XCTAssertEqual(points.count, 3)
+        XCTAssertEqual(points[0], .zero)
+        XCTAssertEqual(points[1], CGPoint(x: 10.0, y: 0.0))
+        XCTAssertEqual(points[2], CGPoint(x: 10.0, y: 10.0))
+    }
+
+    func testCountPointsUseLastExplicitAnchorForClosedPath() throws {
+
+        let subPath = VectorSubPath(
+            points: [
+                .point(.zero),
+                .point(CGPoint(x: 2.0, y: 0.0)),
+                .point(CGPoint(x: 2.0, y: 2.0)),
+            ],
+            closed: true
+        )
+
+        let points: [CGPoint] = subPath.points(count: 2)
+
+        XCTAssertEqual(points.count, 2)
+        XCTAssertEqual(points[0], .zero)
+        XCTAssertEqual(points[1], CGPoint(x: 2.0, y: 2.0))
+    }
     
     func testSVG() throws {
         let vectorPath: VectorPath = .rectangle(frame: .one)
