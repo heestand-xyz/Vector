@@ -29,23 +29,23 @@ extension VectorPath {
             let outerPaddingAngle: Angle = Angle(radians: Double(cornerRadius / (outerRadius - cornerRadius)))
             
             let outerLeadingCenter = CGPoint(
-                x: position.x + cos(CGFloat(leadingAngle.radians + outerPaddingAngle.radians)) * outerPaddingRadius,
-                y: position.y + sin(CGFloat(leadingAngle.radians + outerPaddingAngle.radians)) * outerPaddingRadius)
+                x: position.x + CGFloat(cos(leadingAngle.radians + outerPaddingAngle.radians)) * outerPaddingRadius,
+                y: position.y + CGFloat(sin(leadingAngle.radians + outerPaddingAngle.radians)) * outerPaddingRadius)
             let outerTrailingCenter = CGPoint(
-                x: position.x + cos(CGFloat(trailingAngle.radians - outerPaddingAngle.radians)) * outerPaddingRadius,
-                y: position.y + sin(CGFloat(trailingAngle.radians - outerPaddingAngle.radians)) * outerPaddingRadius)
+                x: position.x + CGFloat(cos(trailingAngle.radians - outerPaddingAngle.radians)) * outerPaddingRadius,
+                y: position.y + CGFloat(sin(trailingAngle.radians - outerPaddingAngle.radians)) * outerPaddingRadius)
             
             let innerLeadingSidePoint = CGPoint(
-                x: position.x + cos(CGFloat(leadingAngle.radians)) * cornerRadius,
-                y: position.y + sin(CGFloat(leadingAngle.radians)) * cornerRadius)
+                x: position.x + CGFloat(cos(leadingAngle.radians)) * cornerRadius,
+                y: position.y + CGFloat(sin(leadingAngle.radians)) * cornerRadius)
             
             let innerTrailingSidePoint = CGPoint(
-                x: position.x + cos(CGFloat(trailingAngle.radians)) * cornerRadius,
-                y: position.y + sin(CGFloat(trailingAngle.radians)) * cornerRadius)
+                x: position.x + CGFloat(cos(trailingAngle.radians)) * cornerRadius,
+                y: position.y + CGFloat(sin(trailingAngle.radians)) * cornerRadius)
             
             let innerTrailingSideExtraPoint = CGPoint(
-                x: position.x + cos(CGFloat(trailingAngle.radians)) * (cornerRadius + 0.0001),
-                y: position.y + sin(CGFloat(trailingAngle.radians)) * (cornerRadius + 0.0001))
+                x: position.x + CGFloat(cos(trailingAngle.radians)) * (cornerRadius + 0.0001),
+                y: position.y + CGFloat(sin(trailingAngle.radians)) * (cornerRadius + 0.0001))
             
             let circle = threePointCircle(innerLeadingSidePoint, innerTrailingSidePoint, innerTrailingSideExtraPoint)
 
