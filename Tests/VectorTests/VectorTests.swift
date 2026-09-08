@@ -92,7 +92,7 @@ final class VectorTest: XCTestCase {
             )
         )
 
-        let normalized = vectorPath.selfIntersectionUnion(count: 32)
+        let normalized = vectorPath.normalize(count: 32)
         let subPaths = normalized.subPaths()
 
         XCTAssertEqual(subPaths.count, 2)
@@ -109,7 +109,7 @@ final class VectorTest: XCTestCase {
             radii: 0.5...1.0
         )
 
-        let normalized = vectorPath.selfIntersectionUnion(count: 64)
+        let normalized = vectorPath.normalize(count: 64)
         let subPaths = normalized.subPaths()
 
         XCTAssertEqual(subPaths.count, 2)
@@ -136,7 +136,7 @@ final class VectorTest: XCTestCase {
             closed: true
         )
 
-        let normalizedSubPaths = subPath.selfIntersectionUnion(count: 64)
+        let normalizedSubPaths = VectorPath(subPath: subPath).normalize(count: 64).subPaths()
         let normalizedPath = VectorPath(subPaths: normalizedSubPaths)
 
         XCTAssertEqual(normalizedSubPaths.count, 2)
@@ -156,17 +156,21 @@ final class VectorTest: XCTestCase {
             closed: false
         )
 
-        XCTAssertEqual(subPath.selfIntersectionUnion(count: 16), [subPath])
-        XCTAssertEqual(VectorPath(subPath: subPath).selfIntersectionUnion(count: 16), VectorPath(subPath: subPath))
+        let normalizedSubPaths = VectorPath(subPath: subPath).normalize(count: 16).subPaths()
+        XCTAssertEqual(normalizedSubPaths.count, 1)
+        let normalizedSubPath = try XCTUnwrap(normalizedSubPaths.first)
+        XCTAssertEqual(normalizedSubPath.points, subPath.points)
+        XCTAssertEqual(normalizedSubPath.closed, subPath.closed)
+        XCTAssertEqual(VectorPath(subPath: subPath).normalize(count: 16), VectorPath(subPath: subPath))
     }
 
     func testSelfIntersectionUnionSamplingVariantsProduceClosedOutput() throws {
 
         let vectorPath: VectorPath = .circle(radius: 1.0)
 
-        let spacingResult = vectorPath.selfIntersectionUnion(spacing: 0.2)
-        let spacingFractionResult = vectorPath.selfIntersectionUnion(spacingFraction: 0.05)
-        let countResult = vectorPath.selfIntersectionUnion(count: 32)
+        let spacingResult = vectorPath.normalize(spacing: 0.2)
+        let spacingFractionResult = vectorPath.normalize(spacingFraction: 0.05)
+        let countResult = vectorPath.normalize(count: 32)
 
         for result in [spacingResult, spacingFractionResult, countResult] {
             let subPaths = result.subPaths()
