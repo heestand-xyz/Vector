@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct VectorSubPath: Sendable {
+public struct VectorSubPath: Sendable, Codable {
     public let points: [VectorPoint]
     public let closed: Bool
     public init(points: [VectorPoint], closed: Bool) {
