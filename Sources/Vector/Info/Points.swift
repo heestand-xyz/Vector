@@ -67,6 +67,7 @@ extension VectorPath {
         var startPoint: CGPoint?
         var lastPoint: CGPoint?
         var targetPoints: [CGPoint] = []
+        var subPathSampleStartIndex: Int = 0
         
         cgPath.applyWithBlock { elementPointer in
             
@@ -74,6 +75,7 @@ extension VectorPath {
             
             switch element.type {
             case .moveToPoint:
+                subPathSampleStartIndex = targetPoints.count
                 startPoint = element.points.pointee
                 lastPoint = startPoint
                 if phase == 0.0 {
@@ -127,7 +129,8 @@ extension VectorPath {
                         let targetPoint = Self.point(at: offset, from: lastPoint, to: startPoint, length: length)
                         targetPoints.append(targetPoint)
                     }
-                    if lastPoint == startPoint {
+                    if targetPoints.count - subPathSampleStartIndex > 1,
+                       targetPoints.last == targetPoints[subPathSampleStartIndex] {
                         targetPoints.removeLast()
                     }
                 }

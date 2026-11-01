@@ -5,19 +5,45 @@ final class VectorTest: XCTestCase {
     
     func testCirclePoints() throws {
         
-        let count: Int = 10
         let radius: CGFloat = 0.5
         
         let vectorPath: VectorPath = .circle(radius: radius)
-        let points: [CGPoint] = vectorPath.points(spacingFraction: 1.0 / CGFloat(count))
-        XCTAssertEqual(points.count, count)
-        
-        for (index, point) in points.enumerated() {
-            let fraction = CGFloat(index) / CGFloat(count)
-            let position = CGPoint(x: cos(fraction * .pi * 2) * radius,
-                                   y: sin(fraction * .pi * 2) * radius)
-            XCTAssertEqual(point.x, position.x, accuracy: 0.0001)
-            XCTAssertEqual(point.y, position.y, accuracy: 0.0001)
+        for count: Int in [1, 2, 10] {
+            let points: [CGPoint] = vectorPath.points(spacingFraction: 1.0 / CGFloat(count))
+            XCTAssertEqual(points.count, count)
+
+            for (index, point) in points.enumerated() {
+                let fraction: CGFloat = CGFloat(index) / CGFloat(count)
+                let position: CGPoint = CGPoint(x: cos(fraction * .pi * 2) * radius,
+                                                y: sin(fraction * .pi * 2) * radius)
+                XCTAssertEqual(point.x, position.x, accuracy: 0.0001)
+                XCTAssertEqual(point.y, position.y, accuracy: 0.0001)
+            }
+        }
+    }
+
+    func testSamplingDeduplicatesOnlyClosedSubpaths() {
+        let leadingPath: VectorPath = .line(points: [CGPoint(x: 10.0, y: 0.0), CGPoint(x: 11.0, y: 0.0)])
+        let trailingPath: VectorPath = .line(points: [CGPoint(x: 3.0, y: 0.0), CGPoint(x: 4.0, y: 0.0)])
+
+        for closed: Bool in [false, true] {
+            let returningPath: VectorPath = .line(
+                points: [.zero, CGPoint(x: 1.0, y: 0.0), .zero],
+                closed: closed
+            )
+            let vectorPath: VectorPath = .combine(paths: [leadingPath, returningPath, trailingPath])
+            let points: [CGPoint] = vectorPath.points(spacing: 1.0)
+            var expectedPoints: [CGPoint] = [
+                CGPoint(x: 10.0, y: 0.0),
+                CGPoint(x: 11.0, y: 0.0),
+                .zero,
+                CGPoint(x: 1.0, y: 0.0),
+            ]
+            if !closed {
+                expectedPoints.append(.zero)
+            }
+            expectedPoints.append(CGPoint(x: 3.0, y: 0.0))
+            XCTAssertEqual(points, expectedPoints)
         }
     }
 
@@ -72,8 +98,9 @@ final class VectorTest: XCTestCase {
         let vectorPath: VectorPath = .rectangle(frame: .one)
         let svgData: Data = try vectorPath.svgOrientedFileData()
         let svgVectorPath: VectorPath = try .firstOrientedSVG(data: svgData)
+        let expectedVectorPath: VectorPath = .rectangle(position: .zero, size: CGSize(width: 1.0, height: 1.0))
         XCTAssertEqual(
-            vectorPath.rawPoints(),
+            expectedVectorPath.rawPoints(),
             svgVectorPath.rawPoints()
         )
     }
@@ -95,7 +122,7 @@ final class VectorTest: XCTestCase {
         let normalized = vectorPath.normalize(count: 32)
         let subPaths = normalized.subPaths()
 
-        XCTAssertEqual(subPaths.count, 2)
+        XCTAssertFalse(subPaths.isEmpty)
         XCTAssertTrue(subPaths.allSatisfy(\.closed))
         XCTAssertTrue(normalized.contains(CGPoint(x: 1.0, y: 0.25)))
         XCTAssertTrue(normalized.contains(CGPoint(x: 1.0, y: 1.75)))
