@@ -6,26 +6,7 @@ import SVGPath
 
 extension VectorPath {
     
-    enum SVGError: LocalizedError {
-        case stringToDataFailed
-        case dataToStringFailed
-        case noVectorPathsFound
-        case svgViewBoxSizeNotFound
-        var errorDescription: String? {
-            switch self {
-            case .stringToDataFailed:
-                "String to data conversion failed."
-            case .dataToStringFailed:
-                "Data to string conversion failed."
-            case .noVectorPathsFound:
-                "No vector paths found."
-            case .svgViewBoxSizeNotFound:
-                "SVG view box size not found."
-            }
-        }
-    }
-    
-    /// This will scale and orient a vector path with it's center at `.zero` it's height being `1.0`.
+    /// Exports an oriented vector into an SVG view box matching the supplied frame.
     public func svgOrientedFileData(
         color: PixelColor = .black,
         backgroundColor: PixelColor = .white,
@@ -35,7 +16,7 @@ extension VectorPath {
         let frame: CGRect = frame ?? boundingBox()
         return try self
             .scale(by: CGSize(width: 1.0, height: -1.0))
-            .translate(by: CGPoint(x: -frame.origin.x, y: frame.origin.y))
+            .translate(by: CGPoint(x: -frame.minX, y: frame.minY))
             .svgFileData(color: color, backgroundColor: backgroundColor, lineWidth: lineWidth, size: frame.size)
     }
     
@@ -96,10 +77,10 @@ extension VectorPath {
     public static func allOrientedSVGs(
         data: Data
     ) throws -> [VectorPath] {
-        let (size, vectorPaths): (CGSize, [VectorPath]) = try allSVGsWithSize(data: data)
+        let (viewBox, vectorPaths): (CGRect, [VectorPath]) = try SVGPathExtractor.extract(data: data)
         return vectorPaths.map { vectorPath in
             vectorPath
-                .translate(by: CGPoint(x: -size.width / 2, y: size.height / 2))
+                .translate(by: CGPoint(x: -viewBox.midX, y: viewBox.midY))
                 .scale(by: CGSize(width: 1.0, height: -1.0))
         }
     }
@@ -129,19 +110,8 @@ extension VectorPath {
     public static func allSVGsWithSize(
         data: Data
     ) throws -> (size: CGSize, vectorPaths: [VectorPath]) {
-        let parser = XMLParser(data: data)
-        let delegate = SVGPathExtractor()
-        parser.delegate = delegate
-        parser.parse()
-        guard let size: CGSize = delegate.size else {
-            throw SVGError.svgViewBoxSizeNotFound
-        }
-        var vectorPaths: [VectorPath] = []
-        for path in delegate.paths {
-            let vectorPath: VectorPath = try svg(path: path)
-            vectorPaths.append(vectorPath)
-        }
-        return (size, vectorPaths)
+        let (viewBox, vectorPaths): (CGRect, [VectorPath]) = try SVGPathExtractor.extract(data: data)
+        return (viewBox.size, vectorPaths)
     }
     
     /// The path inside an svg file.
@@ -151,27 +121,7 @@ extension VectorPath {
         
         let cgPath: CGPath = try .from(svgPath: path)
         
-        return VectorPath(cgPath: cgPath, closed: true)
-    }
-}
-
-private class SVGPathExtractor: NSObject, XMLParserDelegate {
-    var paths: [String] = []
-    var size: CGSize?
-    func parser(_ parser: XMLParser,
-                didStartElement elementName: String,
-                namespaceURI: String?,
-                qualifiedName qName: String?,
-                attributes attributeDict: [String : String] = [:]) {
-        if elementName.lowercased() == "svg" {
-            let viewBox: [Double] = attributeDict["viewBox"]?.split(separator: " ").compactMap(Double.init) ?? []
-            if viewBox.count == 4 {
-                size = CGSize(width: viewBox[2], height: viewBox[3])
-            }
-        }
-        if elementName.lowercased() == "path",
-           let d = attributeDict["d"] {
-            paths.append(d)
-        }
+        let subPaths: [VectorSubPath] = VectorPath(cgPath: cgPath, closed: false).subPaths()
+        return VectorPath(cgPath: cgPath, closed: !subPaths.isEmpty && subPaths.allSatisfy(\.closed))
     }
 }

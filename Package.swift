@@ -30,6 +30,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "VectorTests",
-            dependencies: ["Vector"])
+            dependencies: ["Vector"],
+            exclude: ["SVG/SVG_Logo.current.png"],
+            resources: [
+                .copy("SVG/SVG_Logo.svg"),
+                .copy("SVG/SVG_Logo.expected.png"),
+            ])
     ]
 )
