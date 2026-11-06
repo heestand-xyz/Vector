@@ -48,7 +48,8 @@ final class SVGPathExtractor: NSObject, XMLParserDelegate {
         }
         let viewBox: CGRect = CGRect(x: values[0], y: values[1], width: values[2], height: values[3])
         var paths: [VectorPath] = []
-        try extractor.render(root, parentTransform: .identity, viewportSize: viewBox.size, ancestors: [], into: &paths)
+        try extractor.render(root, parentTransform: .identity, viewportSize: viewBox.size,
+                             inheritedFillStyle: .initial, ancestors: [], into: &paths)
         return (viewBox, paths)
     }
 
@@ -76,7 +77,8 @@ final class SVGPathExtractor: NSObject, XMLParserDelegate {
     }
 
     private func render(_ element: Element, parentTransform: CGAffineTransform, viewportSize: CGSize,
-                        ancestors: Set<ObjectIdentifier>, into paths: inout [VectorPath]) throws {
+                        inheritedFillStyle: SVGFillStyle, ancestors: Set<ObjectIdentifier>,
+                        into paths: inout [VectorPath]) throws {
         guard element.isSVG else { return }
         // Definition and metadata subtrees are indexed but never painted directly.
         guard Self.renderableElementNames.contains(element.name) else { return }
@@ -86,6 +88,7 @@ final class SVGPathExtractor: NSObject, XMLParserDelegate {
         }
         var ancestors: Set<ObjectIdentifier> = ancestors
         ancestors.insert(identity)
+        let fillStyle: SVGFillStyle = try inheritedFillStyle.resolving(attributes: element.attributes)
         let localTransform: CGAffineTransform = try SVGTransformParser.parse(element.attributes["transform"] ?? "")
         var transform: CGAffineTransform = localTransform.concatenating(parentTransform)
 
@@ -109,7 +112,7 @@ final class SVGPathExtractor: NSObject, XMLParserDelegate {
             guard let transformedPath: CGPath = path.cgPath.copy(using: &pathTransform) else {
                 throw VectorPath.SVGError.transformFailed
             }
-            paths.append(VectorPath(cgPath: transformedPath, closed: path.closed))
+            paths.append(fillStyle.convert(path: transformedPath, closed: path.closed))
         case "use":
             guard let reference: String = element.attributes["href"] ?? element.attributes["xlink:href"] else {
                 throw VectorPath.SVGError.missingReference("href")
@@ -127,13 +130,15 @@ final class SVGPathExtractor: NSObject, XMLParserDelegate {
             let y: CGFloat = try coordinate("y", in: element)
             transform = CGAffineTransform(translationX: x, y: y).concatenating(transform)
             // A use inherits its own ancestors, not the referenced element's original ancestors.
-            try render(target, parentTransform: transform, viewportSize: viewportSize, ancestors: ancestors, into: &paths)
+            try render(target, parentTransform: transform, viewportSize: viewportSize,
+                       inheritedFillStyle: fillStyle, ancestors: ancestors, into: &paths)
         default:
             if element.name == "svg", element !== root {
                 throw VectorPath.SVGError.unsupportedElement("nested svg")
             }
             for child: Element in element.children {
-                try render(child, parentTransform: transform, viewportSize: viewportSize, ancestors: ancestors, into: &paths)
+                try render(child, parentTransform: transform, viewportSize: viewportSize,
+                           inheritedFillStyle: fillStyle, ancestors: ancestors, into: &paths)
             }
         }
     }
