@@ -35,7 +35,7 @@ extension VectorPath {
             case .missingReference(let reference):
                 "The SVG reference \"\(reference)\" has no matching element. Correct the reference or add the missing element."
             case .unsupportedReference(let reference):
-                "The SVG reference \"\(reference)\" is not supported. Use a local reference to a path, group, or use element."
+                "The SVG reference \"\(reference)\" is not supported. Use a local reference to a path, basic shape, group, or use element."
             case .circularReference(let reference):
                 "The SVG reference \"\(reference)\" creates a cycle. Remove the circular use reference."
             case .unsupportedElement(let name):

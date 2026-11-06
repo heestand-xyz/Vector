@@ -1,8 +1,11 @@
 import CoreGraphics
 import Foundation
 
-/// Resolves path geometry only. Paint, stroke expansion, and CSS are not represented by VectorPath.
+/// Resolves path and basic shape geometry. Paint, stroke expansion, and CSS are not represented by VectorPath.
 final class SVGPathExtractor: NSObject, XMLParserDelegate {
+
+    private static let renderableElementNames: Set<String> = Set<String>(["svg", "g", "a", "path", "use"])
+        .union(SVGShapeParser.elementNames)
 
     private final class Element {
         let name: String
@@ -45,7 +48,7 @@ final class SVGPathExtractor: NSObject, XMLParserDelegate {
         }
         let viewBox: CGRect = CGRect(x: values[0], y: values[1], width: values[2], height: values[3])
         var paths: [VectorPath] = []
-        try extractor.render(root, parentTransform: .identity, ancestors: [], into: &paths)
+        try extractor.render(root, parentTransform: .identity, viewportSize: viewBox.size, ancestors: [], into: &paths)
         return (viewBox, paths)
     }
 
@@ -72,11 +75,11 @@ final class SVGPathExtractor: NSObject, XMLParserDelegate {
         stack.removeLast()
     }
 
-    private func render(_ element: Element, parentTransform: CGAffineTransform,
+    private func render(_ element: Element, parentTransform: CGAffineTransform, viewportSize: CGSize,
                         ancestors: Set<ObjectIdentifier>, into paths: inout [VectorPath]) throws {
         guard element.isSVG else { return }
         // Definition and metadata subtrees are indexed but never painted directly.
-        guard ["svg", "g", "a", "path", "use"].contains(element.name) else { return }
+        guard Self.renderableElementNames.contains(element.name) else { return }
         let identity: ObjectIdentifier = ObjectIdentifier(element)
         guard !ancestors.contains(identity) else {
             throw VectorPath.SVGError.circularReference("#\(element.attributes["id"] ?? element.name)")
@@ -87,9 +90,16 @@ final class SVGPathExtractor: NSObject, XMLParserDelegate {
         var transform: CGAffineTransform = localTransform.concatenating(parentTransform)
 
         switch element.name {
-        case "path":
-            guard let pathData: String = element.attributes["d"], !pathData.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-            let path: VectorPath = try .svg(path: pathData)
+        case "path", "rect", "circle", "ellipse", "line", "polyline", "polygon":
+            let path: VectorPath
+            if element.name == "path" {
+                guard let pathData: String = element.attributes["d"], !pathData.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+                path = try .svg(path: pathData)
+            } else {
+                let shapeParser: SVGShapeParser = SVGShapeParser(attributes: element.attributes, viewportSize: viewportSize)
+                guard let shape: VectorPath = try shapeParser.path(for: element.name) else { return }
+                path = shape
+            }
             // SVGPath parses into Y-up coordinates. Conjugate the SVG-space transform
             // by the Y reflection, preserving the existing raw VectorPath API.
             var pathTransform: CGAffineTransform = CGAffineTransform(
@@ -110,20 +120,20 @@ final class SVGPathExtractor: NSObject, XMLParserDelegate {
             guard let target: Element = elementsByID[String(reference.dropFirst())] else {
                 throw VectorPath.SVGError.missingReference(reference)
             }
-            guard ["g", "a", "path", "use"].contains(target.name) else {
+            guard target.name != "svg", Self.renderableElementNames.contains(target.name) else {
                 throw VectorPath.SVGError.unsupportedReference(reference)
             }
             let x: CGFloat = try coordinate("x", in: element)
             let y: CGFloat = try coordinate("y", in: element)
             transform = CGAffineTransform(translationX: x, y: y).concatenating(transform)
             // A use inherits its own ancestors, not the referenced element's original ancestors.
-            try render(target, parentTransform: transform, ancestors: ancestors, into: &paths)
+            try render(target, parentTransform: transform, viewportSize: viewportSize, ancestors: ancestors, into: &paths)
         default:
             if element.name == "svg", element !== root {
                 throw VectorPath.SVGError.unsupportedElement("nested svg")
             }
             for child: Element in element.children {
-                try render(child, parentTransform: transform, ancestors: ancestors, into: &paths)
+                try render(child, parentTransform: transform, viewportSize: viewportSize, ancestors: ancestors, into: &paths)
             }
         }
     }
